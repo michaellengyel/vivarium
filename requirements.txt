@@ -69,3 +69,5 @@ torchvision==0.15.2+cu118
 tqdm==4.62.3
 typeguard==2.13.3
 av2
+bpy==4.0.0
+mathutils
