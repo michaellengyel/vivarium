@@ -70,4 +70,5 @@ tqdm==4.62.3
 typeguard==2.13.3
 av2
 bpy==4.0.0
-mathutils
+mathutils~=3.3.0
+pyquaternion~=0.9.9
