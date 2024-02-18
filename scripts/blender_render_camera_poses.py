@@ -4,9 +4,9 @@ import csv
 from mathutils import Euler, Vector
 
 # Set the path to the CSV file
-csv_file_path = "/script/camera_poses.csv"
+csv_file_path = "/home/peter/PycharmProjects/vivarium/scenes/scene_1/camera_poses.csv"
 # Set the output directory for rendered images
-output_directory = "/home/peter/PycharmProjects/vivarium/output/scene"
+output_directory = "/home/peter/PycharmProjects/vivarium/scenes/scene_1/images"
 
 # Create the output directory if it doesn't exist
 os.makedirs(output_directory, exist_ok=True)
@@ -23,7 +23,6 @@ with open(csv_file_path, 'r') as csvfile:
 
         # Set camera location
         bpy.context.scene.camera.location = Vector((pos_x, pos_y, pos_z))
-        print((frame_number, pos_x, pos_y, pos_z))
 
         # Set camera rotation
         bpy.context.scene.camera.rotation_euler = Euler((rot_x, rot_y, rot_z), 'XYZ')
