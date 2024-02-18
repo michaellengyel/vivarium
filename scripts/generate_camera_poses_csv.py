@@ -5,7 +5,7 @@ import random
 from mathutils import Vector
 
 # Set the path for the output CSV file
-output_csv_file = "../scenes/scene_1/camera_poses.csv"
+output_csv_file = "../scenes/scene_0/camera_poses.csv"
 
 # Open the CSV file in write mode
 with open(output_csv_file, 'w', newline='') as csvfile:

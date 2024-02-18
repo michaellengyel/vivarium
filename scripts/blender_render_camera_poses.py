@@ -6,7 +6,7 @@ from mathutils import Euler, Vector
 # Set the path to the CSV file
 csv_file_path = "/home/peter/PycharmProjects/vivarium/scenes/scene_1/camera_poses.csv"
 # Set the output directory for rendered images
-output_directory = "/home/peter/PycharmProjects/vivarium/scenes/scene_1/images"
+output_directory = "/home/peter/PycharmProjects/vivarium/scenes/scene_0/images"
 
 # Create the output directory if it doesn't exist
 os.makedirs(output_directory, exist_ok=True)

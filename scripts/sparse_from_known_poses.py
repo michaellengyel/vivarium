@@ -76,9 +76,9 @@ def main():
     # Run sparse_from_known_poses.py
     # colmap point_triangulator --database_path database.db --image_path images --input_path sparse/0 --output_path sparse/0
 
-    csv_file_path = "./scenes/scene_3/camera_poses.csv"
-    db_file_path = "./scenes/scene_3/database.db"
-    output_file_path = "./scenes/scene_3/sparse/0/images.txt"
+    csv_file_path = "./scenes/scene_0/camera_poses.csv"
+    db_file_path = "./scenes/scene_0/database.db"
+    output_file_path = "./scenes/scene_0/sparse/0/images.txt"
 
     image_order = get_colmap_image_order(db_file_path)
     generate_images_txt(csv_file_path, image_order, output_file_path)
