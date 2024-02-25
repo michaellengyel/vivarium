@@ -28,15 +28,20 @@ To conver the camera_poses.csv to colmap format, run:
 
 ```
 The script needs:
-+── path to scene
++── path to scene_0
 │   +── images
 │   +── camera_poses.csv
 │   +── cameras.txt
     
 colmap feature_extractor --database_path database.db --image_path images --ImageReader.camera_model PINHOLE
 colmap exhaustive_matcher --database_path database.db --ExhaustiveMatching.block_size 300
-Run sparse_from_known_poses.py
+# Run sparse_from_known_poses.py
 colmap point_triangulator --database_path database.db --image_path images --input_path sparse/0 --output_path sparse/0
+# Move camera_poses.csv and cameras.txt to sparse/0
+# Run the the Gaussian Splatting training and create the .ply scene
+(gaussian-splatting) python .../gaussian-splatting/train.py -s scene_0/sparse/0
+# View the resulting gaussian splat
+(gaussian-splatting) ./SIBR_viewers/install/bin/SIBR_gaussianViewer_app --model-path gaussian-splatting/output/XXXXXXXX-X
 ```
 Notes: Remember to have the right images size rendered in Blender.
 

@@ -1,0 +1,1 @@
+Namespace(data_device='cuda', eval=False, images='images', model_path='./output/60c9fbf4-c', resolution=-1, sh_degree=3, source_path='/home/peter/work/gaussian-splatting/data/private/scene_3', white_background=False)
