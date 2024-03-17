@@ -1,10 +1,14 @@
 # Vivarium
-Training environment for mobile robots
+Vivarium is a feasibility study on using Gaussian Splat to train camera mobile robots in a reinforcement learning
+environment. To simplify the process, the prototype Gaussian Splat was created using an artificial scene made in
+Blender. The advantage of this is that the Blender mesh and resulting Gaussian splat are in the same coordinate system.
+Colmap was used find the initial feature points used to seed the splat. 
 
 <p align="center">
-  <img src="./assets/environment_alpha.png"/>
+  <img src="./docs/render_demo.png"/>
 </p>
 
+![Teaser](./docs/render_demo.gif?raw=true)
 
 ## Setup  
 ```
@@ -46,3 +50,4 @@ colmap point_triangulator --database_path database.db --image_path images --inpu
 Notes: Remember to have the right images size rendered in Blender.
 
 ## Other
+Coming soon...
