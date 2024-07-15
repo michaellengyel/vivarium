@@ -72,4 +72,3 @@ av2
 bpy==4.0.0
 mathutils~=3.3.0
 pyquaternion~=0.9.9
-gsplat
