@@ -18,7 +18,7 @@ def main(config):
 if __name__ == '__main__':
 
     argParser = argparse.ArgumentParser()
-    argParser.add_argument("-c", "--config", default="./configs/default.yaml", help="path to default.yaml file")
+    argParser.add_argument("-c", "--configs", default="./configs/default.yaml", help="path to default.yaml file")
     args = argParser.parse_args()
 
     with open(args.config, "r") as stream:

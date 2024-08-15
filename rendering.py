@@ -43,19 +43,19 @@ opacities = torch.tensor(ply_data['opacity']).to(device)
 colors = torch.tensor(np.vstack([ply_data['f_dc_0'], ply_data['f_dc_1'], ply_data['f_dc_2']] + [ply_data[f"f_rest_{coeff_idxs[i]}"] for i in range(3 * (num_coeffs-1))])).to(device).permute(1, 0).reshape(-1, num_coeffs, 3)
 
 # Adding target gaussian
-t_mean = torch.tensor([[2, 0, 2]])
-t_scale = torch.tensor([[-3.0, -3.0, -3.0]])
-t_scale = torch.tensor([[1.0, 1.0, 1.0]]) * -1.0
-t_quat = torch.tensor([[1.0, 0.0, 0.0, 1.0]])
-t_opacities = torch.tensor([[2.7]])
-t_colors = torch.zeros((1, 16, 3))
-t_colors[:, 0, 0] = 2.8
-
-means[0:1, :] = t_mean
-scales[0:1, :] = t_scale
-quats[0:1, :] = t_quat
-opacities[0:1] = t_opacities
-colors[0:1, :, :] = t_colors
+# t_mean = torch.tensor([[2, 0, 2]])
+# t_scale = torch.tensor([[-3.0, -3.0, -3.0]])
+# t_scale = torch.tensor([[1.0, 1.0, 1.0]]) * -1.0
+# t_quat = torch.tensor([[1.0, 0.0, 0.0, 1.0]])
+# t_opacities = torch.tensor([[2.7]])
+# t_colors = torch.zeros((1, 16, 3))
+# t_colors[:, 0, 0] = 2.8
+#
+# means[0:1, :] = t_mean
+# scales[0:1, :] = t_scale
+# quats[0:1, :] = t_quat
+# opacities[0:1] = t_opacities
+# colors[0:1, :, :] = t_colors
 
 n = 5
 
@@ -65,7 +65,6 @@ rot_mat, translation_vector = convert_to_colmap_pose(pos, rot)
 viewmats = torch.zeros(1, 4, 4)
 viewmats[0, 0:3, 0:3] = torch.tensor(rot_mat)
 viewmats[0, 3:4, 0:3] = torch.tensor(translation_vector).unsqueeze(0)
-# viewmats[0, 0:3, 3:4] = torch.tensor(translation_vector).unsqueeze(1)
 viewmats[0, 3, 3] = 1.0
 viewmats = viewmats.to(device).permute(0, 2, 1)
 

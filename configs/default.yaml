@@ -1,2 +1,4 @@
-value_one: 1
-value_two: 2
+ply_path: "/home/peter/PycharmProjects/vivarium/scenes/scene_0/splat/point_cloud/iteration_30000/point_cloud.ply"
+device: 'cuda:0'
+width: 300
+height: 200
