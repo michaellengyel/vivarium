@@ -1,0 +1,4 @@
+ply_path: "/home/peter/PycharmProjects/vivarium/scenes/scene_0/splat/point_cloud/iteration_30000/point_cloud.ply"
+device: 'cuda:0'
+width: 512
+height: 256
