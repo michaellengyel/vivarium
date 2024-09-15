@@ -24,11 +24,24 @@ class Environment:
         gaussian_loader = GaussianLoader(self.ply_path, self.device)
         self.gaussian_data = gaussian_loader.load_gaussian_splat()
 
+        # Set target
+        self.set_target()
+
         # Initialize pos and rot
         self.viewmats = None
         self.state = np.array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0])  # x, z, y, roll, pitch, yaw
         self.update_state(action=np.array([0.0, -15.0, 2.0, 90.0, 0.0, 0.0]))
 
+    def set_target(self):
+
+        x = -3
+        y = -3
+        self.gaussian_data["means"][0:1, :] = torch.tensor([[x, y, 2]])
+        self.gaussian_data["quats"][0:1, :] = torch.tensor([[1.0, 0.0, 0.0, 1.0]])
+        self.gaussian_data["scales"][0:1, :] = 0.1
+        self.gaussian_data["opacities"][0:1] = 100.0
+        self.gaussian_data["colors"][0:1, :, 0] = 0.0
+        self.gaussian_data["colors"][0:1, 0, 0] = 1.0
 
     def step(self, action):
         self.update_state(action)
