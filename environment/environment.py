@@ -1,4 +1,5 @@
 import argparse
+
 import yaml
 import torch
 import os
@@ -9,6 +10,7 @@ from gaussian_loader import GaussianLoader
 from gsplat.rendering import rasterization
 from scipy.spatial.transform import Rotation as Rotation
 from matplotlib import pyplot as plt
+from PIL import Image
 
 
 class Environment:
@@ -30,7 +32,7 @@ class Environment:
         # Initialize pos and rot
         self.viewmats = None
         self.state = np.array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0])  # x, z, y, roll, pitch, yaw
-        self.update_state(action=np.array([0.0, -15.0, 2.0, 90.0, 0.0, 0.0]))
+        self.update_state(action=np.array([0.0, -25.0, 2.0, 90.0, 0.0, 0.0]))
 
     def set_target(self):
 
@@ -86,26 +88,41 @@ class Environment:
     def reset(self):
         pass
 
-    def visualize(self):
+    def visualize(self, idx, plot=True):
         color = self.render_state()
         image_np = color.squeeze(0).cpu().detach().numpy()
-        height, width = image_np.shape[:2]
-        aspect_ratio = width / height
-        n = 5  # Multiply by a factor to control the size
-        fig = plt.figure(figsize=(aspect_ratio * n, n))
-        plt.imshow(image_np, aspect='auto')
-        plt.axis('off')
-        plt.show()
+
+        if plot:
+            height, width = image_np.shape[:2]
+            aspect_ratio = width / height
+            n = 5  # Multiply by a factor to control the size
+            plt.figure(figsize=(aspect_ratio * n, n))
+            plt.imshow(image_np, aspect='auto')
+            plt.axis('off')
+            plt.show()
+
+        else:
+            img = Image.fromarray((image_np * 255).astype(np.uint8))
+            path = "./output/"
+            if not os.path.exists(path):
+                os.makedirs(path)
+            img.save(path + str(idx).zfill(8) + ".png")
 
 
 def main(config):
 
     environment = Environment(config)
-    num_step = 100
+    num_step = 200
 
     for i in range(num_step):
-        environment.visualize()
-        environment.update_state([0.0, 1.0, 0.0, 0.0, 0.0, 5.0])
+        environment.visualize(i, plot=False)
+        if i < 70:
+            state = np.array([0.0, 0.2, 0.0, 0.0, 0.0, 0.0])
+        elif i < 120:
+            state = np.array([0.0, 0.2, 0.0, 0.0, 0.0, 3.0])
+        elif i < 200:
+            state = np.array([0.0, 0.2, 0.0, 0.0, 0.0, 0.0])
+        environment.update_state(state)
 
 
 if __name__ == '__main__':

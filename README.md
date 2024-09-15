@@ -49,5 +49,10 @@ colmap point_triangulator --database_path database.db --image_path images --inpu
 ```
 Notes: Remember to have the right images size rendered in Blender.
 
+To stitch output .png images together use:
+```
+ffmpeg -framerate 30 -pattern_type glob -i "*.png" -c:v libx264 -pix_fmt yuv420p output.mp4
+```
+
 ## Other
 Coming soon...
