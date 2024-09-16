@@ -10,7 +10,7 @@ from gaussian_loader import GaussianLoader
 from gsplat.rendering import rasterization
 from scipy.spatial.transform import Rotation as Rotation
 from matplotlib import pyplot as plt
-from PIL import Image
+from PIL import Image, ImageDraw
 
 
 class Environment:
@@ -83,12 +83,20 @@ class Environment:
         return rot_mat.T, translation_vector
 
     def calculate_reward(self):
-        return 0.0
+        center = torch.tensor(self.state[0:3], device=self.gaussian_data["means"].device)
+        side_length = 0.5
+        half_length = side_length / 2
+        lower_bound = center - half_length
+        upper_bound = center + half_length
+        mask = (self.gaussian_data["means"] >= lower_bound) & (self.gaussian_data["means"] <= upper_bound)
+        mask = mask.all(dim=1)
+        points = self.gaussian_data["means"][mask]
+        return points.shape[0]
 
     def reset(self):
         pass
 
-    def visualize(self, idx, plot=True):
+    def visualize(self, idx, reward=0, plot=True):
         color = self.render_state()
         image_np = color.squeeze(0).cpu().detach().numpy()
 
@@ -102,11 +110,13 @@ class Environment:
             plt.show()
 
         else:
-            img = Image.fromarray((image_np * 255).astype(np.uint8))
+            image = Image.fromarray((image_np * 255).astype(np.uint8))
+            draw = ImageDraw.Draw(image)
+            draw.text((10, 10), str(reward))
             path = "./output/"
             if not os.path.exists(path):
                 os.makedirs(path)
-            img.save(path + str(idx).zfill(8) + ".png")
+            image.save(path + str(idx).zfill(8) + ".png")
 
 
 def main(config):
@@ -115,7 +125,8 @@ def main(config):
     num_step = 200
 
     for i in range(num_step):
-        environment.visualize(i, plot=False)
+        reward = environment.calculate_reward()
+        environment.visualize(i, reward=reward, plot=False)
         if i < 70:
             state = np.array([0.0, 0.2, 0.0, 0.0, 0.0, 0.0])
         elif i < 120:
