@@ -6,6 +6,7 @@ import os
 import numpy as np
 
 from gaussian_loader import GaussianLoader
+from visualizer import Visualizer
 
 from gsplat.rendering import rasterization
 from scipy.spatial.transform import Rotation as Rotation
@@ -26,6 +27,8 @@ class Environment:
         gaussian_loader = GaussianLoader(self.ply_path, self.device)
         self.gaussian_data = gaussian_loader.load_gaussian_splat()
 
+        self.visualizer = Visualizer()
+
         # Set target
         self.set_target()
 
@@ -33,6 +36,10 @@ class Environment:
         self.viewmats = None
         self.state = np.array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0])  # x, z, y, roll, pitch, yaw
         self.update_state(action=np.array([0.0, -25.0, 2.0, 90.0, 0.0, 0.0]))
+        self.visualizer.append_state(self.state)
+
+        # Historic data
+
 
     def set_target(self):
 
@@ -61,6 +68,7 @@ class Environment:
         viewmats[0, 3:4, 0:3] = torch.tensor(translation_vector).unsqueeze(0)
         viewmats[0, 3, 3] = 1.0
         self.viewmats = viewmats.permute(0, 2, 1).to(self.device)
+        self.visualizer.append_state(self.state)
 
     def render_state(self):
         Ks = torch.tensor([[[self.width/3, 0.0, self.width/2], [0.0, self.width/3, self.height/2], [0., 0., 1.]]], device=self.device)
@@ -96,28 +104,6 @@ class Environment:
     def reset(self):
         pass
 
-    def visualize(self, idx, reward=0, plot=True):
-        color = self.render_state()
-        image_np = color.squeeze(0).cpu().detach().numpy()
-
-        if plot:
-            height, width = image_np.shape[:2]
-            aspect_ratio = width / height
-            n = 5  # Multiply by a factor to control the size
-            plt.figure(figsize=(aspect_ratio * n, n))
-            plt.imshow(image_np, aspect='auto')
-            plt.axis('off')
-            plt.show()
-
-        else:
-            image = Image.fromarray((image_np * 255).astype(np.uint8))
-            draw = ImageDraw.Draw(image)
-            draw.text((10, 10), str(reward))
-            path = "./output/"
-            if not os.path.exists(path):
-                os.makedirs(path)
-            image.save(path + str(idx).zfill(8) + ".png")
-
 
 def main(config):
 
@@ -126,7 +112,8 @@ def main(config):
 
     for i in range(num_step):
         reward = environment.calculate_reward()
-        environment.visualize(i, reward=reward, plot=False)
+        color = environment.render_state()
+        environment.visualizer.visualize(i, color=color, reward=reward, plot=False)
         if i < 70:
             state = np.array([0.0, 0.2, 0.0, 0.0, 0.0, 0.0])
         elif i < 120:
